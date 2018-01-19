@@ -19,8 +19,7 @@ import { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import { createStyledComponent } from '../../../../../styles';
 import Button from '../../../../../Button';
-import DemoContent from '../components/DemoContent';
-import Popover from '../../../../../Popover';
+import Tooltip from '../../../../../Tooltip';
 
 const DemoLayout = createStyledComponent('div', {
   display: 'flex',
@@ -31,10 +30,10 @@ const DemoLayout = createStyledComponent('div', {
 export default {
   id: 'controlled',
   title: 'Controlled',
-  description: `Popover controls its own state by default,
+  description: `Tooltip controls its own state by default,
 and can optionally be managed by the application as a controlled component through the \`isOpen\` attribute.
 Callbacks for \`onOpen\` and \`onClose\` are also provided.`,
-  scope: { Button, Component, DemoContent, DemoLayout, findDOMNode, Popover },
+  scope: { Button, Component, DemoLayout, findDOMNode, Tooltip },
   source: `
     class App extends Component {
       constructor(props) {
@@ -46,7 +45,7 @@ Callbacks for \`onOpen\` and \`onClose\` are also provided.`,
 
         this.onOpen = this.onOpen.bind(this);
         this.onClose = this.onClose.bind(this);
-        this.togglePopover = this.togglePopover.bind(this);
+        this.toggleTooltip = this.toggleTooltip.bind(this);
       }
 
       onOpen(event) {
@@ -54,7 +53,7 @@ Callbacks for \`onOpen\` and \`onClose\` are also provided.`,
       }
 
       onClose(event) {
-        // Prevent extra call to togglePopover when clicking the controlling button.
+        // Prevent extra call to toggleTooltip when clicking the controlling button.
         // Also avoid interactions with other popovers.
         const demoLayoutNode = findDOMNode(this.demoLayout);
         if (
@@ -68,7 +67,7 @@ Callbacks for \`onOpen\` and \`onClose\` are also provided.`,
         this.setState({ isOpen: false });
       }
 
-      togglePopover(event) {
+      toggleTooltip(event) {
         if (this.state.isOpen) {
           this.onClose(event);
         } else {
@@ -77,17 +76,17 @@ Callbacks for \`onOpen\` and \`onClose\` are also provided.`,
       }
 
       render() {
-        const label = this.state.isOpen ? 'Close Popover' : 'Open Popover';
+        const label = this.state.isOpen ? 'Close Tooltip' : 'Open Tooltip';
         return (
           <DemoLayout ref={node => { this.demoLayout = node }}>
-            <Popover
-              content={<DemoContent />}
+            <Tooltip
+              content="This tooltip is controlled"
               isOpen={this.state.isOpen}
               onOpen={this.onOpen}
               onClose={this.onClose}>
               <Button>{label}</Button>
-            </Popover>
-            <Button onClick={this.togglePopover}>{label}</Button>
+            </Tooltip>
+            <Button onClick={this.toggleTooltip}>{label}</Button>
           </DemoLayout>
         );
       }

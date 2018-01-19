@@ -17,34 +17,89 @@
 /* @flow */
 import Button from '../../../../../Button';
 import { createStyledComponent } from '../../../../../styles';
-import DemoContent from '../components/DemoContent';
-import Popover from '../../../../../Popover';
+import Tooltip from '../../../../../Tooltip';
 
 const DemoLayout = createStyledComponent('div', {
   height: '350px',
-  position: 'relative',
+  position: 'relative'
+});
 
-  '> div': {
-    left: '50%',
-    position: 'absolute',
-    top: '50%',
-    transform: 'translate(-50%, -50%)'
-  }
+const TopStartTooltip = createStyledComponent(Tooltip, {
+  left: '35%',
+  position: 'absolute',
+  top: '30%',
+  transform: 'translate(-50%, -50%)'
+});
+const TopTooltip = createStyledComponent(Tooltip, {
+  left: '50%',
+  position: 'absolute',
+  top: '30%',
+  transform: 'translate(-50%, -50%)'
+});
+const TopEndTooltip = createStyledComponent(Tooltip, {
+  left: '65%',
+  position: 'absolute',
+  top: '30%',
+  transform: 'translate(-50%, -50%)'
+});
+const BottomStartTooltip = createStyledComponent(Tooltip, {
+  left: '35%',
+  position: 'absolute',
+  top: '70%',
+  transform: 'translate(-50%, -50%)'
+});
+const BottomTooltip = createStyledComponent(Tooltip, {
+  left: '50%',
+  position: 'absolute',
+  top: '70%',
+  transform: 'translate(-50%, -50%)'
+});
+const BottomEndTooltip = createStyledComponent(Tooltip, {
+  left: '65%',
+  position: 'absolute',
+  top: '70%',
+  transform: 'translate(-50%, -50%)'
 });
 
 export default {
   id: 'placement',
   title: 'Placement',
-  description: `The \`placement\` prop determines the initial placement of the Popover content relative to the trigger.
-The Popover will still react to viewport edges and scrolling.`,
-  scope: { Button, DemoContent, DemoLayout, Popover },
+  description: `The \`placement\` prop determines the initial placement of the Tooltip content relative to the trigger.
+The Tooltip will still react to viewport edges and scrolling.`,
+  scope: {
+    Button,
+    DemoLayout,
+    BottomStartTooltip,
+    BottomTooltip,
+    BottomEndTooltip,
+    TopStartTooltip,
+    TopTooltip,
+    TopEndTooltip
+  },
   source: `
     <DemoLayout>
-      <Popover
-        content={<DemoContent />}
-        placement="bottom"
-        isOpen>
-        <Button>Open Popover</Button>
-      </Popover>
+      <TopStartTooltip content="t" placement="top-start" isOpen>
+        <Button>top-start</Button>
+      </TopStartTooltip>
+
+      <TopTooltip content="t" placement="top" isOpen>
+        <Button>top</Button>
+      </TopTooltip>
+
+      <TopEndTooltip content="t" placement="top-end" isOpen>
+        <Button>top-end</Button>
+      </TopEndTooltip>
+
+      <BottomStartTooltip content="b" placement="bottom-start" isOpen>
+        <Button>bottom-start</Button>
+      </BottomStartTooltip>
+
+      <BottomTooltip content="b" placement="bottom" isOpen>
+        <Button>bottom</Button>
+      </BottomTooltip>
+
+      <BottomEndTooltip content="b" placement="bottom-end" isOpen>
+        <Button>bottom-end</Button>
+      </BottomEndTooltip>
     </DemoLayout>`
 };
