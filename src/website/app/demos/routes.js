@@ -123,6 +123,28 @@ export default [
     slug: 'icon',
     title: 'Icon'
   },
+  [
+    {
+      description: 'TODO',
+      slug: 'layout', // TODO: redirect to next nav item?
+      title: 'Layout'
+    },
+    {
+      description: 'TODO',
+      slug: 'box',
+      title: 'Box'
+    },
+    {
+      description: 'TODO',
+      slug: 'flex',
+      title: 'Flex'
+    },
+    {
+      description: 'TODO',
+      slug: 'flex-item',
+      title: 'FlexItem'
+    }
+  ],
   {
     description:
       'Links change the users’ browser location, and clearly express the intended destination.',
