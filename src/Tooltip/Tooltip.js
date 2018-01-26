@@ -33,6 +33,23 @@ type Props = {
   , onClose?: (event: SyntheticEvent<>) => void
   /** Called when Tooltip is opened */
   , onOpen?: (event: SyntheticEvent<>) => void
+  /** Placement of the Tooltip */
+  , placement?:
+    | 'auto'
+    | 'auto-end'
+    | 'auto-start'
+    | 'bottom'
+    | 'bottom-end'
+    | 'bottom-start'
+    | 'left'
+    | 'left-end'
+    | 'left-start'
+    | 'right'
+    | 'right-end'
+    | 'right-start'
+    | 'top'
+    | 'top-end'
+    | 'top-start'
 };
 
 type State = {
@@ -68,13 +85,22 @@ export default class Tooltip extends Component<Props, State> {
   render() {
     const {
       children,
+      placement,
       ...restProps
     } = this.props;
 
     const { isOpen } = this.isControlled ? this.props : this.state;
 
     const contentProps = {
-      content: <TooltipContent>{this.safeContent}</TooltipContent>
+      placement
+    };
+
+    const contentOverrides = {
+      content: (
+        <TooltipContent {...contentProps}>
+          {this.safeContent}
+        </TooltipContent>
+      )
       , wrapContent: false
     };
 
@@ -82,7 +108,7 @@ export default class Tooltip extends Component<Props, State> {
       ...restProps
       , getTriggerProps: this.getTriggerProps
       , isOpen
-      , ...contentProps
+      , ...contentOverrides
     };
 
     return <Popover {...popoverProps}>{children}</Popover>;
