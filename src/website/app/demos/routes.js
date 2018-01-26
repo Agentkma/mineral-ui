@@ -192,7 +192,7 @@ export default [
     slug: 'theme-provider',
     title: 'ThemeProvider'
   },
-  tooltip: {
+  {
     description:
     'Tooltips display supporting content when your user interacts with an associated trigger. Use Tooltips to implement other custom behaviors or widgets.',
     slug: 'tooltip',
