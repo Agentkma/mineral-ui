@@ -143,7 +143,7 @@ export default class Popover extends Component<Props, State> {
       contentId,
       children,
       disabled,
-      isOpen,
+      isOpen: Boolean(isOpen),
       onClick: !disabled ? this.toggleOpenState : undefined,
       ref: node => {
         this.popoverTrigger = node;
