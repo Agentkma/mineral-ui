@@ -69,7 +69,6 @@ export default class Tooltip extends Component<Props, State> {
     isOpen: Boolean(this.props.defaultIsOpen)
   };
 
-  isControlled = () => this.props.isOpen !== undefined;
 
   safeContent = (({content}) => {
     switch (typeof content) {
@@ -89,7 +88,7 @@ export default class Tooltip extends Component<Props, State> {
       ...restProps
     } = this.props;
 
-    const { isOpen } = this.isControlled ? this.props : this.state;
+    const { isOpen } = this.isControlled() ? this.props : this.state;
 
     const contentProps = {
       placement
@@ -133,7 +132,7 @@ export default class Tooltip extends Component<Props, State> {
   };
 
   open = (event: SyntheticEvent<>) => {
-    if (this.isControlled) {
+    if (this.isControlled()) {
       this.openActions(event);
     } else {
       this.setState(
@@ -150,7 +149,7 @@ export default class Tooltip extends Component<Props, State> {
   };
 
   close = (event: SyntheticEvent<>) => {
-    if (this.isControlled) {
+    if (this.isControlled()) {
       this.closeActions(event);
     } else {
       this.setState(
@@ -165,4 +164,6 @@ export default class Tooltip extends Component<Props, State> {
   closeActions = (event: SyntheticEvent<>) => {
     this.props.onClose && this.props.onClose(event);
   };
+
+  isControlled = () => this.props.isOpen !== undefined;
 };
