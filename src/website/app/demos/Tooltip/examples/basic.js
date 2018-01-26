@@ -19,6 +19,7 @@ import Button from '../../../../../Button';
 import Tooltip from '../../../../../Tooltip';
 import IconAdd from 'mineral-ui-icons/IconAdd';
 import IconDelete from 'mineral-ui-icons/IconDelete';
+import IconHelp from 'mineral-ui-icons/IconHelp';
 import { createStyledComponent } from '../../../../../styles';
 
 const DemoLayout = createStyledComponent('div', {
@@ -34,15 +35,19 @@ export default {
   description: `Tooltips wrap the triggering component.
 Placement is relative to the location of the trigger.
 Tooltips will change position relative to the trigger automatically depending on viewport constraints.`,
-  scope: { Button, DemoLayout, IconAdd, IconDelete, Tooltip },
+  scope: { Button, DemoLayout, IconAdd, IconDelete, IconHelp, Tooltip },
   source: `
     <DemoLayout>
-      <Tooltip content="Delete">
-        <Button minimal variant="danger" iconStart={<IconDelete />} />
+      <Tooltip content="Delete" defaultIsOpen>
+        <IconHelp title="help" />
       </Tooltip>
 
-      <Tooltip content="Add new">
-        <Button primary circular iconStart={<IconAdd />} />
+      <Tooltip content="Delete">
+        <Button minimal variant="danger" iconStart={<IconDelete title="delete" />} />
+      </Tooltip>
+
+      <Tooltip content="Add new" isOpen>
+        <Button primary circular iconStart={<IconAdd title="add new" />} />
       </Tooltip>
     </DemoLayout>`
 };
