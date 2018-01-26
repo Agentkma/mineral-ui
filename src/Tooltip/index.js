@@ -16,6 +16,4 @@
 
 /* @flow */
 export { default } from './Tooltip';
-export { default as PopoverArrow } from './PopoverArrow';
-export { default as PopoverContent } from './PopoverContent';
-export { default as PopoverTrigger } from './PopoverTrigger';
+export { default as TooltipContent } from './TooltipContent';

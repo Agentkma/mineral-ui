@@ -21,8 +21,8 @@ import importSyntax from './importSyntax';
 import placement from './placement';
 
 export default [
-  // importSyntax,
+  importSyntax,
   basic,
-  // placement,
-  // controlled
+  placement,
+  controlled
 ];

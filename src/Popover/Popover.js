@@ -161,7 +161,7 @@ export default class Popover extends Component<Props, State> {
       if (wrapContent) {
         const popoverContentProps = {
           hasArrow,
-          id: contentId,
+          id: contentId, // TODO: fix
           modifiers,
           placement,
           ref: node => {

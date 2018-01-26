@@ -17,17 +17,17 @@
 /* @flow */
 import React, { cloneElement, Component } from 'react';
 import { createStyledComponent } from '../styles';
-import { generateId } from '../utils';
 import Popover from '../Popover';
+import TooltipContent from './TooltipContent';
 
 type Props = {
   /** Trigger for the Tooltip */
   children: React$Node
   /** Content of the Tooltip */
-  , content: string // TODO: enforce
+  , content: string | () => string // TODO: why do we want to support functions returning string?
   /** For use with uncontrolled components, in which the Tooltip is immediately upon initialization */
   , defaultIsOpen?: boolean
-  /** For use with controlled components, in which the app manages Dropdown state */
+  /** Include an arrow on the Tooltip content pointing to the trigger */
   , isOpen?: boolean
   /** Called when Tooltip is closed */
   , onClose?: (event: SyntheticEvent<>) => void
@@ -52,7 +52,18 @@ export default class Tooltip extends Component<Props, State> {
     isOpen: Boolean(this.props.defaultIsOpen)
   };
 
-  id: string = `tooltip-${generateId()}`;
+  isControlled = () => this.props.isOpen !== undefined;
+
+  safeContent = (({content}) => {
+    switch (typeof content) {
+    case 'string': return content;
+    case 'function':
+      const result = content();
+      return typeof result === 'string' ? result : '';
+    default:
+      return '';
+    }
+  })(this.props);
 
   render() {
     const {
@@ -60,14 +71,18 @@ export default class Tooltip extends Component<Props, State> {
       ...restProps
     } = this.props;
 
-    const isControlled = this.isControlled();
-    console.log('tooltip controlled?', isControlled);
-    const { isOpen } = isControlled ? this.props : this.state;
+    const { isOpen } = this.isControlled ? this.props : this.state;
+
+    const contentProps = {
+      content: <TooltipContent>{this.safeContent}</TooltipContent>
+      , wrapContent: false
+    };
 
     const popoverProps = {
       ...restProps
-      , isOpen
       , getTriggerProps: this.getTriggerProps
+      , isOpen
+      , ...contentProps
     };
 
     return <Popover {...popoverProps}>{children}</Popover>;
@@ -84,7 +99,6 @@ export default class Tooltip extends Component<Props, State> {
     , tabIndex: 0
   });
 
-
   onTriggerKeyDown = (event: SyntheticEvent<>) => {
     if (event.key === 'Escape') {
       event.preventDefault();
@@ -93,7 +107,7 @@ export default class Tooltip extends Component<Props, State> {
   };
 
   open = (event: SyntheticEvent<>) => {
-    if (this.isControlled()) {
+    if (this.isControlled) {
       this.openActions(event);
     } else {
       this.setState(
@@ -110,7 +124,7 @@ export default class Tooltip extends Component<Props, State> {
   };
 
   close = (event: SyntheticEvent<>) => {
-    if (this.isControlled()) {
+    if (this.isControlled) {
       this.closeActions(event);
     } else {
       this.setState(
@@ -125,8 +139,4 @@ export default class Tooltip extends Component<Props, State> {
   closeActions = (event: SyntheticEvent<>) => {
     this.props.onClose && this.props.onClose(event);
   };
-
-  isControlled = () => {
-    return this.props.isOpen !== undefined ;
-  };
-}
+};
