@@ -18,7 +18,6 @@
 import React from 'react';
 import { Arrow } from 'react-popper';
 import { createStyledComponent } from '../styles';
-import { componentTheme as popoverContentComponentTheme } from './PopoverContent';
 
 type Props = {
   /** Size of arrow */
@@ -42,10 +41,16 @@ type Props = {
     | 'top-start'
 };
 
+export const componentTheme = (baseTheme: Object) => ({
+  PopoverArrow_backgroundColor: baseTheme.color_white,
+  PopoverArrow_borderColor: baseTheme.color_gray_20,
+  ...baseTheme
+});
+
 const Root = createStyledComponent(
   Arrow,
   ({ placement, size, theme: baseTheme }) => {
-    const theme = popoverContentComponentTheme(baseTheme);
+    const theme = componentTheme(baseTheme);
     let arrowShadow = ', 0 3px 1px rgba(0, 0, 0, 0.3)';
     let directionalStyles;
     let offset = `-${parseFloat(size) - 2}px`;
@@ -99,12 +104,12 @@ const Root = createStyledComponent(
     }
 
     return {
-      color: theme.PopoverContent_backgroundColor,
+      color: theme.PopoverArrow_backgroundColor,
       display: 'inline-block',
       fontSize: size,
       margin: size,
       position: 'absolute',
-      textShadow: `0 2px 0 ${theme.PopoverContent_borderColor}${arrowShadow}`,
+      textShadow: `0 2px 0 ${theme.PopoverArrow_borderColor}${arrowShadow}`,
       transform: `rotate(${rotation}deg) scaleX(2)`,
       ...directionalStyles
     };

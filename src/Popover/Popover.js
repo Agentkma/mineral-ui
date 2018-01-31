@@ -168,6 +168,7 @@ export default class Popover extends Component<Props, State> {
             this.popoverContent = node;
           },
           subtitle,
+          tabIndex: 0,
           title
         };
 

@@ -20,7 +20,7 @@ import { Popper } from 'react-popper';
 import { createStyledComponent } from '../styles';
 import { createThemedComponent } from '../themes';
 import { CardBlock, CardTitle } from '../Card';
-import PopoverArrow from './PopoverArrow';
+import PopoverArrow, { componentTheme as popoverArrowComponentTheme } from './PopoverArrow';
 
 type Props = {
   /** Content of the Popover */
@@ -55,6 +55,8 @@ type Props = {
 const arrowSize = '8px';
 
 export const componentTheme = (baseTheme: Object) => ({
+  ...popoverArrowComponentTheme(baseTheme),
+
   PopoverContent_backgroundColor: baseTheme.color_white,
   PopoverContent_borderColor: baseTheme.color_gray_20,
   PopoverContent_borderRadius: baseTheme.borderRadius_1,
@@ -125,7 +127,6 @@ export default class PopoverContent extends Component<Props> {
 
     const rootProps = {
       placement,
-      tabIndex: 0,
       ...restProps
     };
     const popoverArrowProps = {
