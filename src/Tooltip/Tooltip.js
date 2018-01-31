@@ -69,24 +69,23 @@ export default class Tooltip extends Component<Props, State> {
     isOpen: Boolean(this.props.defaultIsOpen)
   };
 
-
-  safeContent = (({content}) => {
-    switch (typeof content) {
-    case 'string': return content;
-    case 'function':
-      const result = content();
-      return typeof result === 'string' ? result : '';
-    default:
-      return '';
-    }
-  })(this.props);
-
   render() {
     const {
       children,
       placement,
       ...restProps
     } = this.props;
+
+    const safeContent = (({content}) => {
+      switch (typeof content) {
+      case 'string': return content;
+      case 'function':
+        const result = content();
+        return typeof result === 'string' ? result : '';
+      default:
+        return '';
+      }
+    })(this.props);
 
     const { isOpen } = this.isControlled() ? this.props : this.state;
 
@@ -97,7 +96,7 @@ export default class Tooltip extends Component<Props, State> {
     const contentOverrides = {
       content: (
         <TooltipContent {...contentProps}>
-          {this.safeContent}
+          {safeContent}
         </TooltipContent>
       )
       , wrapContent: false
