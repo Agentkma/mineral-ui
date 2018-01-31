@@ -15,7 +15,7 @@
  */
 
 /* @flow */
-import { componentTheme } from '../../../../Popover/PopoverContent';
+import { componentTheme } from '../../../../Tooltip/TooltipContent';
 import bestPractices from './bestPractices';
 import examples from './examples';
 
