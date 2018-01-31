@@ -19,11 +19,14 @@ import React, { cloneElement, Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import { Manager } from 'react-popper';
 import { createStyledComponent } from '../styles';
-import { generateId } from '../utils';
+import { composePropsWithGetter, generateId } from '../utils';
 import EventListener from '../EventListener';
 import Portal from '../Portal';
 import PopoverTrigger from './PopoverTrigger';
-import PopoverContent from './PopoverContent';
+import PopoverContent, {
+  componentTheme as popoverContentComponentTheme
+} from './PopoverContent';
+import { componentTheme as popoverArrowComponentTheme } from './PopoverArrow';
 
 type Props = {
   /** Trigger for the Popover */
@@ -44,6 +47,8 @@ type Props = {
   onOpen?: (event: SyntheticEvent<>) => void,
   /** Open the Popover immediately upon initialization */
   defaultIsOpen?: boolean,
+  /** Function that returns props to be applied to the content */
+  getContentProps?: (props: Object, scope?: Object) => Object,
   /** Function that returns props to be applied to the trigger */
   getTriggerProps?: (props: Object, scope?: Object) => Object,
   /** Placement of the Popover */
@@ -78,6 +83,12 @@ type Props = {
 type State = {
   isOpen?: boolean
 };
+
+export const componentTheme = (baseTheme: Object) => ({
+  ...popoverArrowComponentTheme(baseTheme),
+  ...popoverContentComponentTheme(baseTheme),
+  ...baseTheme
+});
 
 const Root = createStyledComponent(
   Manager,
@@ -120,6 +131,7 @@ export default class Popover extends Component<Props, State> {
       children,
       content,
       disabled,
+      getContentProps,
       getTriggerProps,
       hasArrow,
       modifiers,
@@ -139,37 +151,39 @@ export default class Popover extends Component<Props, State> {
     };
     const contentId = `${this.id}-popoverContent`;
 
-    let popoverTriggerProps = {
-      contentId,
-      children,
-      disabled,
-      isOpen,
-      onClick: !disabled ? this.toggleOpenState : undefined,
-      ref: node => {
-        this.popoverTrigger = node;
-        triggerRef && triggerRef(node);
-      }
-    };
-
-    popoverTriggerProps = {
-      ...popoverTriggerProps,
-      ...(getTriggerProps && getTriggerProps(popoverTriggerProps))
-    };
+    const popoverTriggerProps = composePropsWithGetter(
+      {
+        contentId,
+        children,
+        disabled,
+        isOpen,
+        onClick: !disabled ? this.toggleOpenState : undefined,
+        ref: node => {
+          this.popoverTrigger = node;
+          triggerRef && triggerRef(node);
+        }
+      },
+      getTriggerProps
+    );
 
     let popoverContent;
     if (isOpen) {
       if (wrapContent) {
-        const popoverContentProps = {
-          hasArrow,
-          id: contentId,
-          modifiers,
-          placement,
-          ref: node => {
-            this.popoverContent = node;
+        const popoverContentProps = composePropsWithGetter(
+          {
+            hasArrow,
+            id: contentId,
+            modifiers,
+            placement,
+            ref: node => {
+              this.popoverContent = node;
+            },
+            subtitle,
+            tabIndex: 0,
+            title
           },
-          subtitle,
-          title
-        };
+          getContentProps
+        );
 
         popoverContent = (
           <PopoverContent {...popoverContentProps}>{content}</PopoverContent>

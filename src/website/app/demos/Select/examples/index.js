@@ -15,6 +15,28 @@
  */
 
 /* @flow */
-export { generateId, resetId } from './generateId';
-export { default as composeEventHandlers } from './composeEventHandlers';
-export { default as composePropsWithGetter } from './composePropsWithGetter';
+// import controlled from './controlled';
+// import data from './data';
+// import disabled from './disabled';
+import importSyntax from './importSyntax';
+import select from './select';
+// import onOpenClose from './onOpenClose';
+// import overflow from './overflow';
+// import placement from './placement';
+// import portal from './portal';
+// import scrolling from './scrolling';
+// import wide from './wide';
+
+export default [
+  importSyntax,
+  select
+  // data,
+  // wide,
+  // placement,
+  // overflow,
+  // scrolling,
+  // portal,
+  // onOpenClose,
+  // disabled,
+  // controlled
+];

@@ -125,7 +125,6 @@ export default class PopoverContent extends Component<Props> {
 
     const rootProps = {
       placement,
-      tabIndex: 0,
       ...restProps
     };
     const popoverArrowProps = {

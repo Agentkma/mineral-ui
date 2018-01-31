@@ -17,9 +17,11 @@
 /* @flow */
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
-import { generateId } from '../utils';
+import { composePropsWithGetter, generateId } from '../utils';
 import Root from '../Popover';
-import DropdownContent from './DropdownContent';
+import DropdownContent, {
+  componentTheme as dropdownContentComponentTheme
+} from './DropdownContent';
 
 type Item = {
   iconEnd?: React$Element<*>,
@@ -42,6 +44,12 @@ type Props = {
   disabled?: boolean,
   /** Data from which the [Menu](../menu#data) will be constructed (see [example](#data)) */
   data: Array<{ items: Array<Item>, title?: React$Node }>,
+  /** Function that returns props to be applied to each item */
+  getItemProps?: (props: Object, scope?: Object) => Object,
+  /** Function that returns props to be applied to the menu */
+  getMenuProps?: (props: Object, scope?: Object) => Object,
+  /** Function that returns props to be applied to the trigger */
+  getTriggerProps?: (props: Object, scope?: Object) => Object,
   /** For use with controlled components, in which the app manages Dropdown state */
   isOpen?: boolean,
   /** Plugins that are used to alter behavior. See [PopperJS docs](https://popper.js.org/popper-documentation.html#modifiers) for options. */
@@ -70,6 +78,11 @@ type State = {
   highlightedIndex: null | number,
   isOpen?: boolean
 };
+
+export const componentTheme = (baseTheme: Object) => ({
+  ...dropdownContentComponentTheme(baseTheme),
+  ...baseTheme
+});
 
 /**
  * Dropdown presents a list of actions after a user interacts with a trigger.
@@ -125,6 +138,7 @@ export default class Dropdown extends Component<Props, State> {
       data,
       id: `${this.id}-dropdownContent`,
       getItemProps: this.getItemProps,
+      getMenuProps: this.getMenuProps,
       modifiers,
       placement,
       wide
@@ -148,18 +162,51 @@ export default class Dropdown extends Component<Props, State> {
   }
 
   getTriggerProps = (props: Object) => {
+    console.log('Dropdown.getTriggerProps');
     const contentId = `${this.id}-dropdownContent`;
-    const { isOpen } = props;
+    const { isOpen } = this.isControlled() ? this.props : this.state;
 
-    return {
-      ...props,
-      'aria-activedescendant': isOpen
-        ? this.selectedItemId || `${contentId}-menu`
-        : undefined,
-      'aria-haspopup': true,
-      contentId,
-      onKeyDown: this.onTriggerKeyDown
-    };
+    return composePropsWithGetter(
+      {
+        ...props,
+        'aria-activedescendant': isOpen
+          ? this.selectedItemId || `${contentId}-menu`
+          : undefined,
+        'aria-haspopup': true,
+        contentId,
+        onKeyDown: this.onTriggerKeyDown
+      },
+      this.props.getTriggerProps
+    );
+  };
+
+  getMenuProps = (props: Object) => {
+    console.log('Dropdown.getMenuProps');
+    return composePropsWithGetter(
+      {
+        ...props,
+        role: 'menu'
+      },
+      this.props.getMenuProps
+    );
+  };
+
+  getItemProps = (props: Object, scope: Object) => {
+    console.log('Dropdown.getItemProps');
+    const { index, item } = scope;
+
+    return composePropsWithGetter(
+      {
+        ...props,
+        'aria-disabled': props.disabled,
+        id: `${this.id}-menuItem-${index}`,
+        isHighlighted: this.state.highlightedIndex === index,
+        onClick: this.itemOnClick.bind(null, item),
+        role: 'menuitem',
+        tabIndex: null // Unset tabIndex because we use arrow keys to navigate instead
+      },
+      this.props.getItemProps
+    );
   };
 
   getItems = () => {
@@ -244,20 +291,6 @@ export default class Dropdown extends Component<Props, State> {
 
   isControlled = () => {
     return this.props.isOpen !== undefined;
-  };
-
-  getItemProps = (props: Object, scope: Object) => {
-    const { index, item } = scope;
-
-    return {
-      ...props,
-      'aria-disabled': props.disabled,
-      id: `${this.id}-menuItem-${index}`,
-      isHighlighted: this.state.highlightedIndex === index,
-      onClick: this.itemOnClick.bind(null, item),
-      role: 'menuitem',
-      tabIndex: null // Unset tabIndex because we use arrow keys to navigate instead
-    };
   };
 
   itemOnClick = (item: Item, event: SyntheticEvent<>) => {

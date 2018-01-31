@@ -33,6 +33,7 @@ export { default as Menu, MenuDivider, MenuGroup, MenuItem } from './Menu';
 export { default as Popover } from './Popover';
 export { default as Radio, RadioGroup } from './Radio';
 export { default as TextArea } from './TextArea';
+export { default as Select } from './Select';
 export { default as TextInput } from './TextInput';
 export * from './colors';
 export { createStyledComponent } from './styles';

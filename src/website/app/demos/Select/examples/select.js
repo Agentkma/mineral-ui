@@ -15,6 +15,27 @@
  */
 
 /* @flow */
-export { generateId, resetId } from './generateId';
-export { default as composeEventHandlers } from './composeEventHandlers';
-export { default as composePropsWithGetter } from './composePropsWithGetter';
+import Select from '../../../../../Select';
+// import data from '../../Menu/components/menuData';
+
+const data = [
+  {
+    items: [
+      {
+        text: 'Option 1'
+      },
+      {
+        text: 'Option 2'
+      }
+    ]
+  }
+];
+
+export default {
+  id: 'basic',
+  title: 'Basic Usage',
+  description: ``,
+  scope: { data, Select },
+  source: `
+    <Select data={data} defaultIsOpen />`
+};
