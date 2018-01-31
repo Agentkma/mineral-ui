@@ -38,15 +38,15 @@ Tooltips will change position relative to the trigger automatically depending on
   scope: { Button, DemoLayout, IconAdd, IconDelete, IconHelp, Tooltip },
   source: `
     <DemoLayout>
-      <Tooltip content="whoophaskldfjlaksdjfalksdjflaksjdflaksjdf asdlfkj asldkfj asldkfj asldkfj asldkfj asldkjf alksdjf alskdjf laskdjf laskjdf laksjd flkasjd flaksjd flkajs dflkjas df;lkajs df;lkajs d;flkjas d;flkjas ;dflkja s;dlfkj as;ldfkj as;lkj " defaultIsOpen>
+      <Tooltip content="Help (Shift+F1)" defaultIsOpen>
         <IconHelp title="help" />
       </Tooltip>
 
-      <Tooltip content="Delete">
+      <Tooltip content="Delete (⌫)">
         <Button minimal variant="danger" iconStart={<IconDelete title="delete" />} />
       </Tooltip>
 
-      <Tooltip content="Add new" isOpen>
+      <Tooltip content="Add new (⌘N)" isOpen>
         <Button primary circular iconStart={<IconAdd title="add new" />} />
       </Tooltip>
 
